@@ -10,21 +10,21 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import Pagination from 'react-bootstrap/Pagination';
 import Table from 'react-bootstrap/Table';
+import Bank from "../Bank/Bank";
 
 function AdminBank() {
   const navigate = useNavigate();
 
-  const [customerFirstName,setBankFirstName] = useState("");
-  const [customerLastName,setBankLastName] = useState("");
-  const [customerPassword,setBankPassword] = useState("");
-  const [customerEmail,setBankEmail] = useState("");
+  const [fullName,setBankName] = useState("");
+  const [abbreviation,setBankAbbreviation] = useState("");
 
-    const createCustomer = async () => {
-      if(customerFirstName == "" || customerLastName == "" || customerEmail == "" || customerPassword == ""){
+
+    const createBank = async () => {
+      if(fullName == "" || abbreviation == ""){
         alert('Please fill all the fields');
       }else{
         let req = await axios.post('http://localhost:5000/api/v1/bank-app/banks',
-        {"firstName":customerFirstName,"lastName":customerLastName,"email":customerEmail,"password":customerPassword,"balance":0});
+        {fullName,abbreviation});
         handleClose();
         //console.log(customerFirstName, customerLastName, customerPassword, customerEmail);
         alert('Customer Created Successfullly!');
@@ -54,7 +54,7 @@ function AdminBank() {
     <Navbar something={"admin"}></Navbar>
     <div className="container-sm">
     <Button variant="outline-primary" onClick={handleShow}>
-      🙎 Create New Bank
+    🏦 Create New Bank
       </Button>
 
       <Modal
@@ -70,7 +70,7 @@ function AdminBank() {
         <InputGroup className="mb-3">
         <InputGroup.Text id="basic-addon1">Bank Name</InputGroup.Text>
         <Form.Control
-          onChange={(e) => setBankFirstName(e.target.value)}
+          onChange={(e) => setBankName(e.target.value)}
           aria-label="fullName"
           aria-describedby="basic-addon1"
         />
@@ -80,7 +80,7 @@ function AdminBank() {
       <InputGroup className="mb-3">
         <InputGroup.Text id="basic-addon1">Abbreviation</InputGroup.Text>
         <Form.Control
-          onChange={(e) => setBankPassword(e.target.value)}
+          onChange={(e) => setBankAbbreviation(e.target.value)}
           aria-label="abbreviation"
           aria-describedby="basic-addon1"
         />
@@ -91,7 +91,7 @@ function AdminBank() {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={createCustomer}>Create!</Button>
+          <Button variant="primary" >Create!</Button>
         </Modal.Footer>
       </Modal>
 
@@ -99,14 +99,14 @@ function AdminBank() {
       <thead>
           <tr>
             <th scope="col" width="200">Bank name</th>
-            <th scope="col" width="200">Abbreviation</th>
+            <th scope="col" width="100">Abbreviation</th>
             <th scope="col" width="100">Action</th>
-            <th scope="col" width="100">Disable</th>
+            <th scope="col" width="100">Delete</th>
           </tr>
         </thead>
         </Table>
 {banks && banks.map((bank, index) => 
-          <EditCustomer key={index} bank={bank} />)
+          <Bank key={index} bank={bank} />)
           }
 
 <Pagination>

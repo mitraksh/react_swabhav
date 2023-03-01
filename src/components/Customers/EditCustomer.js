@@ -1,26 +1,54 @@
 import React, { useState } from "react"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Table from 'react-bootstrap/Table';
 import Modal from 'react-bootstrap/Modal';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-
+import axios from "axios";
+import { useEffect } from 'react';
+import CustAccounts from "../Accounts/CustAccounts";
 
 function EditCustomer({customer}) {
+  // console.log( typeof customer.credential.isActive)
+    const username = useParams().username
+    const custId = customer.id;
+    const isActive = customer.credential.isActive; 
     const firstName = customer.firstName;
     const lastName = customer.lastName;
     const email = customer.email;
     const balance = customer.balance;
     const [show, setShow] = useState(false);
+    const [showTX, setShowTX] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    const handleCloseTX = () => setShowTX(false);
+    const handleShowTX = () => setShowTX(true);
+
     const navigate = useNavigate();
    
     const editCustomer = () => {
       //navigate('/editCustomer')
     }
+
+    const disableCustomer = async (id,activeBool,custName, custLastName) => {
+      if(activeBool === true){
+        alert(`${custName}.${custLastName} is disabled.`)
+        await axios.put(`http://localhost:5000/api/v1/bank-app/auth/${id}`,{isActive: false})
+      }else{
+        alert(`${custName}.${custLastName} is enabled.`)
+        await axios.put(`http://localhost:5000/api/v1/bank-app/auth/${id}`,{isActive: true})
+      }
+    }
+
+
+    const getAllCustAccounts = (id) => {
+      navigate(`/custAccs/${username}/${id}`)
+    }
+
+
   return (
     <div className="container-sm">
 
@@ -88,16 +116,17 @@ function EditCustomer({customer}) {
     </td>
 
 
-    <td width="100"> <div className="form-check form-switch">
-        <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" />
-        </div>
+    <td width="100"> 
+    {(isActive === true) ?  <div className="form-check form-switch">
+      <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" onChange={() => {disableCustomer(custId,isActive,firstName,lastName)}}/>
+      </div> : <div className="form-check form-switch">
+      <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" onChange={() => {disableCustomer(custId,isActive,firstName,lastName)}} checked/>
+      </div>}
     </td>
 
-
-    <td width="100"><button className="btn btn-outline-danger"  onClick={editCustomer} >🚫</button></td>
           
     <td width="100">
-    <Button variant="outline-success">Tx</Button>
+    <Button variant="outline-success" onClick={() => {getAllCustAccounts(custId)}}>Tx</Button>
     </td>
           
     </tr>

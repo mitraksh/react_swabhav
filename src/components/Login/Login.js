@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import './login.css'
 
 function Login() {
-  const [username,setUsername] = useState('shailesh@admin.com');
-  const [password,setPassword] = useState('admin');
+  const [username,setUsername] = useState('shailesh@sbi.com');
+  const [password,setPassword] = useState('sbi');
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();

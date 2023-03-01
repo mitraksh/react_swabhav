@@ -31,7 +31,12 @@ function AdminDash() {
       }
      
     }
-  
+
+    const [banks,setBank] = useState(null);
+    const getBanks = async () => {
+      const respBank = await axios.get('http://localhost:5000/api/v1/bank-app/banks');
+      setBank(respBank.data);
+    }
 
     const [show, setShow] = useState(false);
 
@@ -122,7 +127,6 @@ function AdminDash() {
             <th scope="col" width="100">Balance</th>
             <th scope="col" width="100">Action</th>
             <th scope="col" width="100">Disable</th>
-            <th scope="col" width="100">Delete</th>
             <th scope="col" width="100">View</th>
           </tr>
         </thead>
