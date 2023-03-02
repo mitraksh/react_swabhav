@@ -22,9 +22,12 @@ function AdminBank() {
     const createBank = async () => {
       if(fullName == "" || abbreviation == ""){
         alert('Please fill all the fields');
-      }else{
+      }else if(fullName != "" || abbreviation != ""){
         let req = await axios.post('http://localhost:5000/api/v1/bank-app/banks',
         {fullName,abbreviation});
+        console.log(req)
+        alert(`${fullName} Bank Created `)
+        window.location.reload(true)
         handleClose();
         //console.log(customerFirstName, customerLastName, customerPassword, customerEmail);
         alert('Customer Created Successfullly!');
@@ -88,10 +91,7 @@ function AdminBank() {
 
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" >Create!</Button>
+          <Button variant="primary" onClick={createBank}>Create!</Button>
         </Modal.Footer>
       </Modal>
 
